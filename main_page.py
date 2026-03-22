@@ -19,8 +19,13 @@ check=st.write()
 
 if st.button('送出'):
     diacode=his_med[his_med['商品名']==egname]['醫令碼'].iloc[0]
-    result_dict={'醫令碼':diacode,
+    df=google_sheet_upload.read_dataframe(upload)
+    if df[(df['醫令碼']==diacode) & (df['櫃位']==str(site).upper())].empty==True:
+        st.write('建立資料')
+        result_dict={'醫令碼':diacode,
                  '櫃位':str(site).upper(),
                  '建立時間':str(datetime.datetime.now()),}
-    google_sheet_upload.append_dict(upload, result_dict, list(result_dict.keys()))
-    site=st.write(result_dict)
+        google_sheet_upload.append_dict(upload, result_dict, list(result_dict.keys()))
+        site=st.write(result_dict)
+    else:
+        st.write('已存在相同資料，跳過')
