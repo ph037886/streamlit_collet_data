@@ -1,4 +1,4 @@
 pandas==2.3.3
-stream==1.55.0
+streamlit==1.55.0
 gspread==6.2.1
 google-auth==2.49.1
