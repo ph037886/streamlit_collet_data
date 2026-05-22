@@ -7,6 +7,8 @@ upload=google_sheet_upload.get_worksheet('櫃位', 'sheet1')
 
 his_med=pd.read_pickle('files/his_med.pkl')
 
+his_med=his_med[his_med['DC_TYPE']!='NNN'] #篩選為DC品項
+
 egname_list=his_med['商品名'].to_list()
 
 st.title('櫃位確認')
