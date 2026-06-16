@@ -50,7 +50,7 @@ def read_dataframe(worksheet):
     return pd.DataFrame(data)
 
 def append_dataframe(worksheet, df: pd.DataFrame):
-    old_data=worksheet.get_all_records()
+    old_data=read_dataframe(worksheet)
     if old_data.empty==True:
         worksheet.set_dataframe(df, (0,0))
     else:
