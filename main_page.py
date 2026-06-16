@@ -63,7 +63,7 @@ elif sidebar_choice=='潑灑箱盤點':
             '品項':st.column_config.SelectboxColumn(
                 "品項",
                 options=item_dict.keys(),),
-            '效期': st.column_config.DatetimeColumn(
+            '效期': st.column_config.DateColumn(
             "Appointment",
             min_value=datetime.date(2020, 6, 1),
             max_value=datetime.date(2050, 1, 1),
@@ -72,4 +72,4 @@ elif sidebar_choice=='潑灑箱盤點':
         num_rows="dynamic")
     
     if st.button('送出'):
-        print(df)
+        st.dataframe(df)
