@@ -54,7 +54,7 @@ elif sidebar_choice=='潑灑箱盤點':
     
     default_data=list()
     for k, v in item_dict.items():
-        default_data.append({"品項": k, "最少量": v, "效期": '', '實際數量': 0},)
+        default_data.append({"品項": k, "最少量": v, "效期": datetime.date.today(), '實際數量': 0},)
     
     df = pd.DataFrame(default_data)
     edited_df = st.data_editor(
