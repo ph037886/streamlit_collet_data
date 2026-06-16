@@ -3,7 +3,9 @@ import streamlit as st
 import datetime
 import google_sheet_upload
 
-with st.sidebar:
+sidebar_choice = st.sidebar.radio("選擇項目：", ["櫃位確認", "潑灑箱盤點"])
+
+if sidebar_choice=='櫃位確認':
     st.title('選擇項目：')
     with st.expander('櫃位確認'):
         upload=google_sheet_upload.get_worksheet('櫃位', 'sheet1')
@@ -34,6 +36,5 @@ with st.sidebar:
                 site=st.write(result_dict)
             else:
                 st.write('已存在相同資料，跳過')
-    
-    with st.expander('潑灑箱盤點'):
-        st.title('潑灑箱盤點')
+elif sidebar_choice=='潑灑箱盤點':
+    st.title('潑灑箱盤點')
