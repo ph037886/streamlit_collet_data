@@ -3,6 +3,7 @@ import streamlit as st
 import datetime
 import google_sheet_upload
 
+st.set_page_config(layout="wide")
 sidebar_choice = st.sidebar.radio("選擇項目：", ["櫃位確認", "潑灑箱盤點"])
 
 if sidebar_choice=='櫃位確認':
@@ -54,7 +55,7 @@ elif sidebar_choice=='潑灑箱盤點':
     
     default_data=list()
     for k, v in item_dict.items():
-        default_data.append({"品項": k, "最少量": v, "效期": datetime.date.today(), '實際數量': 0},)
+        default_data.append({"品項": k, "最少量": v, "效期": datetime.date.today(), '實際數量': 0,'備註':''},)
     
     df = pd.DataFrame(default_data)
     edited_df = st.data_editor(
@@ -69,7 +70,9 @@ elif sidebar_choice=='潑灑箱盤點':
             max_value=datetime.date(2050, 1, 1),
             format="YYYY/MM/DD",),
             },
-        num_rows="dynamic")
+        num_rows="dynamic",
+        width='content',
+        disabled=['最少量'])
     
     if st.button('送出'):
         new_df=edited_df
