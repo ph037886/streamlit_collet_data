@@ -72,4 +72,9 @@ elif sidebar_choice=='潑灑箱盤點':
         num_rows="dynamic")
     
     if st.button('送出'):
-        st.dataframe(edited_df)
+        new_df=edited_df
+        new_df['護理站']=nurse_station
+        new_df['盤點時間']=datetime.datetime.now()
+        upload=google_sheet_upload.get_worksheet('櫃位', '潑灑箱盤點')
+        google_sheet_upload.append_dataframe(upload,new_df)
+        

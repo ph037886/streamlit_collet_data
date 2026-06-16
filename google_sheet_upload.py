@@ -48,3 +48,11 @@ def overwrite_dataframe(worksheet, df: pd.DataFrame):
 def read_dataframe(worksheet):
     data = worksheet.get_all_records()
     return pd.DataFrame(data)
+
+def append_dataframe(worksheet, df: pd.DataFrame):
+    old_data=worksheet.get_all_records()
+    if old_data.empty==True:
+        worksheet.set_dataframe(df, (0,0))
+    else:
+        worksheet.append_table(values=df.fillna("").values.tolist())
+    
