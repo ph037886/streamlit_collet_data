@@ -59,7 +59,9 @@ def append_dataframe(worksheet, df: pd.DataFrame):
 
     # 情況 1：sheet 是空的
     if not sheet_columns:
-        worksheet.update([df_columns] + df.values.tolist())
+        worksheet.insert_rows(df_columns)
+        worksheet.insert_rows(df.values.tolist())
+        #worksheet.update([df_columns] + df.values.tolist())
 
         return {
             "success": True,
