@@ -76,6 +76,6 @@ elif sidebar_choice=='潑灑箱盤點':
         new_df['護理站']=nurse_station
         new_df['盤點時間']=datetime.datetime.now()
         upload=google_sheet_upload.get_worksheet('櫃位', '潑灑箱盤點')
-        google_sheet_upload.append_dict(upload, new_df.fillna("").values.tolist(), new_df.columns.to_list())
-        #google_sheet_upload.append_dataframe(upload,new_df)
+        #google_sheet_upload.append_dict(upload, new_df.fillna("").values.tolist(), new_df.columns.to_list())
+        google_sheet_upload.append_dataframe(upload,new_df)
         

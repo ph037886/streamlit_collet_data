@@ -50,9 +50,37 @@ def read_dataframe(worksheet):
     return pd.DataFrame(data)
 
 def append_dataframe(worksheet, df: pd.DataFrame):
-    old_data=read_dataframe(worksheet)
-    if old_data.empty==True:
-        worksheet.update([df.columns.tolist()] + df.fillna("").values.tolist())
-    else:
-        worksheet.append_row(values=df.fillna("").values.tolist())
-    
+    df = df.fillna("")
+
+    # 讀取 Google Sheet 第一列作為 columns
+    sheet_columns = worksheet.row_values(1)
+    # DataFrame columns
+    df_columns = df.columns.tolist()
+
+    # 情況 1：sheet 是空的
+    if not sheet_columns:
+        worksheet.update([df_columns] + df.values.tolist())
+
+        return {
+            "success": True,
+            "message": "Sheet 原本為空，已寫入資料",
+            "added_rows": len(df)
+        }
+
+    # 情況 2：sheet 有資料，檢查 columns 是否相同
+    if sheet_columns != df_columns:
+        return {
+            "success": False,
+            "message": "columns 不相同",
+            "sheet_columns": sheet_columns,
+            "df_columns": df_columns
+        }
+
+    # 情況 3：columns 相同，往下 append
+    worksheet.append_rows(df.values.tolist())
+
+    return {
+        "success": True,
+        "message": "columns 相同，已新增資料",
+        "added_rows": len(df)
+    }
