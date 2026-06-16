@@ -3,6 +3,34 @@ from google.oauth2.service_account import Credentials
 import datetime
 import pandas as pd
 import streamlit as st
+import numpy as np
+
+
+def convert_value_for_gsheet(value):
+    if pd.isna(value):
+        return ""
+
+    if isinstance(value, pd.Timestamp):
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+
+    if isinstance(value, datetime.datetime):
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+
+    if isinstance(value, datetime.date):
+        return value.strftime("%Y-%m-%d")
+
+    return value
+
+def clean_df_for_gsheet(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+
+    # NaN / NaT 轉空字串
+    df = df.replace({pd.NaT: "", np.nan: ""})
+
+    for col in df.columns:
+        df[col] = df[col].apply(convert_value_for_gsheet)
+
+    return df
 
 def get_worksheet(spreadsheet_name, worksheet_name=None):
     """
@@ -41,6 +69,7 @@ def append_dict(worksheet, data, columns=None):
 
 
 def overwrite_dataframe(worksheet, df: pd.DataFrame):
+    df = clean_df_for_gsheet(df)
     worksheet.clear()
     worksheet.update([df.columns.tolist()] + df.fillna("").values.tolist())
 
@@ -50,7 +79,7 @@ def read_dataframe(worksheet):
     return pd.DataFrame(data)
 
 def append_dataframe(worksheet, df: pd.DataFrame):
-    df = df.fillna("")
+    df = clean_df_for_gsheet(df)
 
     # 讀取 Google Sheet 第一列作為 columns
     sheet_columns = worksheet.row_values(1)
@@ -59,9 +88,7 @@ def append_dataframe(worksheet, df: pd.DataFrame):
 
     # 情況 1：sheet 是空的
     if not sheet_columns:
-        worksheet.insert_rows(df_columns)
-        worksheet.insert_rows(df.values.tolist())
-        #worksheet.update([df_columns] + df.values.tolist())
+        worksheet.update([df_columns] + df.values.tolist())
 
         return {
             "success": True,
