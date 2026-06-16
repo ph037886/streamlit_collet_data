@@ -52,7 +52,7 @@ def read_dataframe(worksheet):
 def append_dataframe(worksheet, df: pd.DataFrame):
     old_data=read_dataframe(worksheet)
     if old_data.empty==True:
-        worksheet.set_dataframe(df, (0,0))
+        worksheet.update([df.columns.tolist()] + df.fillna("").values.tolist())
     else:
-        worksheet.append_table(values=df.fillna("").values.tolist())
+        worksheet.append_row(values=df.fillna("").values.tolist())
     
