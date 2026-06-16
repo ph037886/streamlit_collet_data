@@ -72,4 +72,4 @@ elif sidebar_choice=='潑灑箱盤點':
         num_rows="dynamic")
     
     if st.button('送出'):
-        st.dataframe(df)
+        st.dataframe(edited_df)
