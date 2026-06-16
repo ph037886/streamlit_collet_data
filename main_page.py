@@ -71,7 +71,6 @@ elif sidebar_choice=='潑灑箱盤點':
             format="YYYY/MM/DD",),
             },
         num_rows="dynamic",
-        width='content',
         disabled=['最少量'])
     
     if st.button('送出'):
