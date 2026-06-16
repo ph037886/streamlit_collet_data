@@ -1,47 +1,39 @@
 import pandas as pd
 import streamlit as st
-from streamlit_gallery.utils.page import page_group
 import datetime
 import google_sheet_upload
 
-def main():
-    page=page_group('p')
+with st.sidebar:
+    st.title('選擇項目：')
+    with st.expander('櫃位確認'):
+        upload=google_sheet_upload.get_worksheet('櫃位', 'sheet1')
+
+        his_med=pd.read_pickle('files/his_med.pkl')
+
+        his_med=his_med[his_med['DC_TYPE']!='YYY'] #篩選未DC品項
+
+        egname_list=his_med['商品名'].to_list()
+
+        st.title('櫃位確認')
+
+        egname=st.selectbox('商品名：', egname_list, index=None)
+
+        site=st.text_input('櫃位：')
+
+        check=st.write()
+
+        if st.button('送出'):
+            diacode=his_med[his_med['商品名']==egname]['醫令碼'].iloc[0]
+            df=google_sheet_upload.read_dataframe(upload)
+            if df[(df['醫令碼']==diacode) & (df['櫃位']==str(site).upper())].empty==True:
+                st.write('建立資料')
+                result_dict={'醫令碼':diacode,
+                        '櫃位':str(site).upper(),
+                        '建立時間':str(datetime.datetime.now()),}
+                google_sheet_upload.append_dict(upload, result_dict, list(result_dict.keys()))
+                site=st.write(result_dict)
+            else:
+                st.write('已存在相同資料，跳過')
     
-    with st.sidebar:
-        st.title('選擇項目：')
-        with st.expander('櫃位確認'):
-            upload=google_sheet_upload.get_worksheet('櫃位', 'sheet1')
-
-            his_med=pd.read_pickle('files/his_med.pkl')
-
-            his_med=his_med[his_med['DC_TYPE']!='YYY'] #篩選未DC品項
-
-            egname_list=his_med['商品名'].to_list()
-
-            st.title('櫃位確認')
-
-            egname=st.selectbox('商品名：', egname_list, index=None)
-
-            site=st.text_input('櫃位：')
-
-            check=st.write()
-
-            if st.button('送出'):
-                diacode=his_med[his_med['商品名']==egname]['醫令碼'].iloc[0]
-                df=google_sheet_upload.read_dataframe(upload)
-                if df[(df['醫令碼']==diacode) & (df['櫃位']==str(site).upper())].empty==True:
-                    st.write('建立資料')
-                    result_dict={'醫令碼':diacode,
-                            '櫃位':str(site).upper(),
-                            '建立時間':str(datetime.datetime.now()),}
-                    google_sheet_upload.append_dict(upload, result_dict, list(result_dict.keys()))
-                    site=st.write(result_dict)
-                else:
-                    st.write('已存在相同資料，跳過')
-        
-        with st.expander('潑灑箱盤點'):
-            st.title('潑灑箱盤點')
-    page.show()
-    
-if __name__=="__main__":
-    main()
+    with st.expander('潑灑箱盤點'):
+        st.title('潑灑箱盤點')

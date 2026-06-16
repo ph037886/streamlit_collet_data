@@ -2,4 +2,3 @@ pandas==2.3.3
 streamlit==1.55.0
 gspread==6.2.1
 google-auth==2.49.1
-streamlit-gallery==0.1.0
