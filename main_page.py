@@ -37,7 +37,7 @@ if sidebar_choice=='櫃位確認':
             st.write('已存在相同資料，跳過')
 elif sidebar_choice=='潑灑箱盤點':
     st.title('潑灑箱盤點')
-    nurse_station=st.selectbox('護理站：', ['膀胱功能室','3病房準備室','4病房護理站','5病房庫房','6病房庫房','7病房準備室','8病房準備室'], index=None)
+    nurse_station=st.selectbox('護理站：', ['化療調配室','膀胱功能室','3病房準備室','4病房護理站','5病房庫房','6病房庫房','7病房準備室','8病房準備室'], index=None)
     item_dict={'意外潑灑的處理單張': 1,
                '警示牌 (或封鎖線)': 1,
                '護目鏡 (或拋棄式面罩)': 1,
